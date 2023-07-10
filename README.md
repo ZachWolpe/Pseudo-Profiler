@@ -1,8 +1,10 @@
 # C++ & Python Profiler
 -----
 
-Decorators to attach to your `C++` or `Python` code to profile runtime characteristics.
+Decorators to attach to `C++` or `Python` code to profile runtime characteristics.
 
+
+![](https://github.com/ZachWolpe/Pseudo-Profiler/blob/main/assets/banner.png)
 
 
 ## Getting Started
