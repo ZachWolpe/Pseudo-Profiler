@@ -2,7 +2,7 @@
  * ---------------------------------------------------------
  * Timing Code:
  * 
- * Reference: https://gist.github.com/TheCherno/31f135eea6ee729ab5f26a6908eb3a5e
+ * Core Reference: https://gist.github.com/TheCherno/31f135eea6ee729ab5f26a6908eb3a5e
  *
  *  - The simpliest for of benchmarking, to be used as a starting point.
  *  - Note:
@@ -11,7 +11,7 @@
  * 
  * : Zach Wolpe
  * : zach.wolpe@medibio.com.au
- * : 07-07-2023
+ * : 10-07-2023
  * ---------------------------------------------------------
 */
 
@@ -55,6 +55,7 @@ struct InstrumentSession {
     std::string Name;
 };
 
+
 class Instrumentor {
 private:
     InstrumentSession* CurrentSession;
@@ -78,7 +79,7 @@ public:
         ProfileCount = 0;
     }
     void WriteProfile(const ProfileResult& result) {
-        std::cout << " >> Writing profile (ProfileCount = " << ProfileCount << ")" << std::endl;
+        // std::cout << " >> Writing profile (ProfileCount = " << ProfileCount << ")" << std::endl;
         if (ProfileCount++ > 0)
             OutputStream << ",";
         
@@ -111,7 +112,6 @@ public:
 };
 
 
-
 class CPUProfiler : public ProfilerInterface {
 private:
     const char* name;
@@ -119,7 +119,6 @@ private:
     std::chrono::time_point<std::chrono::high_resolution_clock> startTime;
     bool Stopped;
 public:
-// std::string sav_loc = "temp-store",
     CPUProfiler( const char* name = "CPUProfiler"): name(name), Stopped(false) {
         startTime = std::chrono::high_resolution_clock::now();
     }
@@ -137,15 +136,13 @@ public:
         double s            = duration * 0.001;
         ProfileResult result = {name, start, end, threadID};
         Instrumentor::Get().WriteProfile(result); 
+        std::cout << " >> CPUProfiler: " << name << " took " << ms << "ms (" << s << "s)" << std::endl;
         Stopped = true; // automatically end the session when we exit scope.
-        // std::cout << "CPUProfiler: Process took: " << s << " seconds ( " << duration << " milliseconds)" << std::endl;
-        // std::cout << "CPUProfiler: Process took: " << duration << "us (" << ms << "ms)" << std::endl;
-        // makdir(sav_loc);
     }
 };
 
 
-// MACRO --------------------------------------------------------------->>
+// MACRO ------------------------------**
 // to automatically generate the name of a function 
 // use a macro to automatically generate the name of a function
 #define PROFILING 1
@@ -155,33 +152,6 @@ public:
 #else
 #define PROFILING_SCOPE(name)
 #endif
-// MACRO --------------------------------------------------------------->>
+// MACRO ------------------------------**
 
 
-void looper() {
-    // nonsense tester operation.
-    std::cout << "    --- looper..." << std::endl;
-    for (int i=1; i<=1000000; i++) {};
-};
-
-void function1() {
-    PROFILE_FUNCTION();
-    std::cout << "  - Running function1..." << std::endl;
-    looper();
-};
-
-void function2() {
-    PROFILE_FUNCTION();
-    std::cout << "  - Running function2..." << std::endl;
-    looper();
-};
-
-void RunBenchmarks() {
-    PROFILE_FUNCTION();
-    std::cout << "Running Benchmarks..." << std::endl;
-    Instrumentor::Get().LaunchSession("myprofiler", "profiler.json");
-    function1();
-    function2();
-    Instrumentor::Get().EndSession();
-
-};

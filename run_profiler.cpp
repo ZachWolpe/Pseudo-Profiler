@@ -16,18 +16,44 @@
 */
 
 #include "cppModules/profiler.cpp"
-void RunBenchmarks();
+
+void looper() {
+    // nonsense tester operation.
+    for (int i=1; i<=1000000; i++) {};
+};
+
+void function1() {
+    PROFILE_FUNCTION();
+    std::cout << "  - Running function1..." << std::endl;
+    looper();
+};
+
+void function2() {
+    PROFILE_FUNCTION();
+    std::cout << "  - Running function2..." << std::endl;
+    looper();
+};
+
+
+void functionWrapper() {
+    PROFILE_FUNCTION();
+    std::cout << "functionWrapper Benchmarks..." << std::endl;
+    looper();
+    function1();
+    function2();
+};
+
+void programWrapper() {
+    PROFILE_FUNCTION();
+    std::cout << ">> Running programWrapper..." << std::endl;
+    Instrumentor::Get().LaunchSession("myprofiler", "profiler.json");
+    functionWrapper();
+    Instrumentor::Get().EndSession();
+};
+
 
 int main() {
-    RunBenchmarks();
-    // std::cin.get();
+    programWrapper();
     return 0;
 }
-
-
-
-
-
-
-
 
