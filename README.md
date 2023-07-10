@@ -49,7 +49,7 @@ The C++ profiler contains an `Instrumentor` class which is responsible for writi
 ----
 ## Example
 
-A detailed example is provided on my [Medium](http://medium.com/ZachWolpe)
+A detailed example is provided on my [Medium](https://zachcolinwolpe.medium.com/profiling-c-python-d52c38b888fa)
 
 
 
